@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import utils.ImageLoader;
@@ -19,22 +17,20 @@ import utils.ImageLoader;
 public class MyAdapter2 extends BaseAdapter{
     private Context mContext;
     private String mPath;
-    private File mFile;
-    private List<String> file_name;
+    private List<String> mFile;
     private LayoutInflater mInflater;
     private ImageLoader mImageLoader;
-    public MyAdapter2(Context context,String path,File file)
+    public MyAdapter2(Context context,String path,List<String> file)
     {
         mContext=context;
         mPath=path;
         mFile=file;
-        file_name= Arrays.asList(file.list());
         mInflater=LayoutInflater.from(mContext);
         mImageLoader = ImageLoader.getInstance(3, ImageLoader.Type.LIFO);
     }
     @Override
     public int getCount() {
-        return file_name.size();
+        return mFile.size();
     }
 
     @Override
@@ -65,7 +61,7 @@ public class MyAdapter2 extends BaseAdapter{
         holder.mImageView
                 .setImageResource(R.drawable.pictures_no);
         //使用Imageloader去加载图片
-        mImageLoader.loadImage(mPath + "/" + file_name.get(position),
+        mImageLoader.loadImage(mPath + "/" + mFile.get(position),
                 holder.mImageView);
         return convertView;
 

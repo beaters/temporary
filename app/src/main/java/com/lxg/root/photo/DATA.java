@@ -9,20 +9,9 @@ import java.io.Serializable;
 public class DATA implements Serializable
 {
     private String path;
-    private File file;
-
-    public File getFile() {
-        return file;
-    }
-
     public String getPath() {
         return path;
     }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public void setPath(String path) {
         this.path = path;
     }

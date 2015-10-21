@@ -71,11 +71,7 @@ public class ImageLoader
         FIFO, LIFO
     }
 
-    /**
-     * 单例获得该实例对象
-     *
-     * @return
-     */
+
     public static ImageLoader getInstance(int threadCount, Type type)
     {
 

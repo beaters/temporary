@@ -1,6 +1,7 @@
 package com.lxg.root.photo;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,31 +9,48 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
+import utils.ImageLoader;
+
 public class FirstActivity extends Activity
 {
+    private ImageLoader mImageLoader;
     private ProgressDialog mProgressDialog;
 
     /**
      * 防止同一个文件夹的多次扫描
      */
     private LinkedList<String> mDirPaths = new LinkedList<String>();
-    private LinkedList<File> mFileList;
     private GridView mGirdView;
     private ListAdapter mAdapter;
-    private Handler mHandler;
 
-
+    private Handler mHandler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            mProgressDialog.dismiss();
+            mAdapter = new MyAdapter(getApplicationContext(), mDirPaths);
+            mGirdView.setAdapter(mAdapter);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,23 +58,11 @@ public class FirstActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
         mGirdView = (GridView) findViewById(R.id.id_gridView);
-
-        mHandler = new Handler()
-        {
-            public void handleMessage(android.os.Message msg)
-            {
-                mProgressDialog.dismiss();
-                mAdapter = new MyAdapter(getApplicationContext(), mDirPaths,mFileList);
-                mGirdView.setAdapter(mAdapter);
-
         getImages();
-
-            }
-        };
     }
 
     /**
-     * 利用ContentProvider扫描手机中的图片，此方法在运行在子线程中 完成图片的扫描
+     * 利用ContentProvider扫描手机中的图片,此方法运行在子线程中,完成图片的扫描
      */
     private void getImages()
     {
@@ -103,7 +109,6 @@ public class FirstActivity extends Activity
                     else
                     {
                         mDirPaths.add(dirPath);
-                        mFileList.add(parentFile);
                     }
 
                 }
@@ -114,5 +119,95 @@ public class FirstActivity extends Activity
             }
         }).start();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    public class MyAdapter extends BaseAdapter
+    {
+
+        private Context mContext;
+        private LinkedList<String> mData;
+        private LayoutInflater mInflater;
+
+
+        public MyAdapter(Context context, LinkedList<String> mData)
+        {
+            this.mContext = context;
+            this.mData = mData;
+            mInflater = LayoutInflater.from(mContext);
+        }
+
+        @Override
+        public int getCount()
+        {
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int position)
+        {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position)
+        {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent)
+        {
+            ViewHolder holder = null;
+            if (convertView == null)
+            {
+                holder = new ViewHolder();
+                convertView = mInflater.inflate(R.layout.grid_item, parent,
+                        false);
+                holder.mImageView = (ImageView) convertView
+                        .findViewById(R.id.id_item_image);
+                convertView.setTag(holder);
+            } else
+            {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            getFirstBitmap(position,holder.mImageView);
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String path=mData.get(position);
+                    Intent intent=new Intent(FirstActivity.this,SecondActivity.class);
+                    intent.putExtra("path",path);
+                    startActivity(intent);
+                }
+            });
+            return convertView;
+        }
+
+        private final class ViewHolder
+        {
+            ImageView mImageView;
+        }
+
+    }
+    public void getFirstBitmap(int po,ImageView imageView)
+    {
+        int position=po;
+        ImageView i=imageView;
+        int a=0;
+        String path=mDirPaths.get(position);
+        File file_parent=new File(path);
+        List<String> photoNames= Arrays.asList(file_parent.list());
+        while(!photoNames.get(a).endsWith(".jpg"))
+            a++;
+        String photoname=photoNames.get(a);
+        mImageLoader = ImageLoader.getInstance(3, ImageLoader.Type.LIFO);
+        mImageLoader.loadImage(path+"/"+photoname,i);
     }
 }
