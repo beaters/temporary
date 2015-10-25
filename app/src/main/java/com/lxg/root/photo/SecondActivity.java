@@ -24,6 +24,7 @@ import utils.ImageLoader;
 
 /**
  * Created by root on 15-10-21.
+ * @author lxg lxgvisual@163.com
  */
 public class SecondActivity extends Activity{
     @Override
@@ -69,6 +70,7 @@ public class SecondActivity extends Activity{
         private List<String> mFile;
         private LayoutInflater mInflater;
         private ImageLoader mImageLoader;
+
         public MyAdapter2(String path,List<String> file)
         {
             mPath=path;
@@ -92,7 +94,7 @@ public class SecondActivity extends Activity{
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null)
             {
@@ -111,16 +113,19 @@ public class SecondActivity extends Activity{
             //使用Imageloader去加载图片
             mImageLoader.loadImage(mPath + "/" + mFile.get(position),
                     holder.mImageView);
+
+
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bitmap bitmap=BitmapFactory.decodeFile(mPath + "/" + mFile.get())
+                    int i=position;
+                    String path=mPath + "/" + mFile.get(i);
                     Intent intent=new Intent(SecondActivity.this,view.class);
-
+                    intent.putExtra("path",path);
+                    startActivity(intent);
                 }
             });
             return convertView;
-
         }
         private final class ViewHolder
         {
