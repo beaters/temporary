@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -22,6 +23,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -211,5 +214,33 @@ public class FirstActivity extends Activity
         String photoname=photoNames.get(a);
         mImageLoader = ImageLoader.getInstance(3, ImageLoader.Type.LIFO);
         mImageLoader.loadImage(path+"/"+photoname,i);
+    }
+
+    public void showAbout()
+    {
+        AlertDialog.Builder builder=new AlertDialog.Builder(getBaseContext())
+                .setIcon(R.drawable.about)
+                .setTitle("关于")
+                .setV
+
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemID=item.getItemId();
+        switch (itemID)
+        {
+            case R.id.action_settings:
+                break;
+            case R.id.about:
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

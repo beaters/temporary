@@ -1,10 +1,7 @@
 package com.lxg.root.photo;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -119,9 +116,14 @@ public class SecondActivity extends Activity{
                 @Override
                 public void onClick(View v) {
                     int i=position;
-                    String path=mPath + "/" + mFile.get(i);
+                    DATA data=new DATA();
+                    data.setmFile(mFile);
+                    data.setmPath(mPath);
+                    data.setPosition(i);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("DATA",data);
                     Intent intent=new Intent(SecondActivity.this,view.class);
-                    intent.putExtra("path",path);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });

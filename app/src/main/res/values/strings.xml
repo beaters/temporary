@@ -2,7 +2,8 @@
     <string name="app_name">图库</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">设置</string>
+    <string name="about">关于</string>
 
         <color name="white">#FFFFFF</color><!--白色 -->
         <color name="ivory">#FFFFF0</color><!--象牙色 -->
