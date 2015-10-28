@@ -119,6 +119,7 @@ public class view extends Activity{
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                     File fileToDelete = new File(path);
                     fileToDelete.delete();
                     if(fileToDelete.getParentFile().list().length!=0) {
@@ -130,7 +131,8 @@ public class view extends Activity{
             builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(context, "您点击了取消", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, "您点击了取消", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                 }
             });
         AlertDialog ad=builder.create();
