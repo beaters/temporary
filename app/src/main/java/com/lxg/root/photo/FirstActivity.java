@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -168,7 +169,7 @@ public class FirstActivity extends Activity
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent)
         {
-            ViewHolder holder = null;
+            ViewHolder holder;
             if (convertView == null)
             {
                 holder = new ViewHolder();
@@ -218,10 +219,23 @@ public class FirstActivity extends Activity
 
     public void showAbout()
     {
-        AlertDialog.Builder builder=new AlertDialog.Builder(getBaseContext())
-                .setIcon(R.drawable.about)
-                .setTitle("关于")
-                .setV
+        AlertDialog.Builder builder=new AlertDialog.Builder(getBaseContext());
+        builder.setIcon(R.drawable.about);
+        builder.setTitle("关于");
+        builder.setMessage("暂未更新完成");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
 
 
     }
@@ -239,7 +253,7 @@ public class FirstActivity extends Activity
             case R.id.action_settings:
                 break;
             case R.id.about:
-
+                showAbout();
         }
         return super.onOptionsItemSelected(item);
     }
