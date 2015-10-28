@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +45,7 @@ public class FirstActivity extends Activity
     /**
      * 防止同一个文件夹的多次扫描
      */
-    private LinkedList<String> mDirPaths = new LinkedList<String>();
+    private LinkedList<String> mDirPaths = new LinkedList<>();
     private GridView mGirdView;
     private ListAdapter mAdapter;
 
@@ -53,7 +54,7 @@ public class FirstActivity extends Activity
         public void handleMessage(Message msg)
         {
             mProgressDialog.dismiss();
-            mAdapter = new MyAdapter(getApplicationContext(), mDirPaths);
+            mAdapter = new MyAdapter(FirstActivity.this, mDirPaths);
             mGirdView.setAdapter(mAdapter);
         }
     };
@@ -127,11 +128,7 @@ public class FirstActivity extends Activity
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
-    }
+
 
     public class MyAdapter extends BaseAdapter
     {
@@ -167,7 +164,7 @@ public class FirstActivity extends Activity
         }
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent)
+        public View getView(final int position, View convertView, ViewGroup parent)
         {
             ViewHolder holder;
             if (convertView == null)
@@ -187,7 +184,8 @@ public class FirstActivity extends Activity
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String path=mData.get(position);
+                    int i=position;
+                    String path=mData.get(i);
                     Intent intent=new Intent(FirstActivity.this,SecondActivity.class);
                     intent.putExtra("path",path);
                     startActivity(intent);
@@ -200,21 +198,20 @@ public class FirstActivity extends Activity
         {
             ImageView mImageView;
         }
-
     }
     public void getFirstBitmap(int po,ImageView imageView)
     {
         int position=po;
         ImageView i=imageView;
-        int a=0;
+        //int a=0;
         String path=mDirPaths.get(position);
         File file_parent=new File(path);
         List<String> photoNames= Arrays.asList(file_parent.list());
-        while(!photoNames.get(a).endsWith(".jpg"))
-            a++;
-        String photoname=photoNames.get(a);
+        /*while(!photoNames.get(a).endsWith(".jpg")||!photoNames.get(a).endsWith(".jpeg"))
+            a++;*/
+        String photoName=photoNames.get(0);
         mImageLoader = ImageLoader.getInstance(3, ImageLoader.Type.LIFO);
-        mImageLoader.loadImage(path+"/"+photoname,i);
+        mImageLoader.loadImage(path + "/" + photoName, i);
     }
 
     public void showAbout()
@@ -239,6 +236,43 @@ public class FirstActivity extends Activity
 
 
     }
+    protected void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FirstActivity.this);
+        builder.setIcon(R.drawable.circle_triangle_down);
+        builder.setMessage("确认退出吗?");
+        builder.setTitle("提示");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                 dialog.dismiss();
+                 FirstActivity.this.finish();
+                 }
+             });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                 dialog.dismiss();
+                 }
+            });
+        builder.create().show();
+    }
+
+    //在onKeyDown(int keyCode, KeyEvent event)方法中调用此方法
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            dialog();
+         }
+        return false;
+     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -257,4 +291,6 @@ public class FirstActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
