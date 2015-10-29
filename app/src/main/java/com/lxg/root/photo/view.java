@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.media.MediaDescriptionCompatApi21;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,30 +113,29 @@ public class view extends Activity{
 
     public void showDialog()
     {
-        AlertDialog.Builder builder=new AlertDialog.Builder(context)
-                .setIcon(R.mipmap.ic_launcher)
-                .setTitle("删除")
-                .setMessage("确定删除吗?");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    File fileToDelete = new File(path);
-                    fileToDelete.delete();
-                    if(fileToDelete.getParentFile().list().length!=0) {
-                        showNext(imageView);
-                    }else
-                        onBackPressed();
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Toast.makeText(context, "您点击了取消", Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
-                }
-            });
-        AlertDialog ad=builder.create();
-        ad.show();
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("删除");
+        builder.setMessage("确定删除吗?");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                File fileToDelete = new File(path);
+                fileToDelete.delete();
+                if (fileToDelete.getParentFile().list().length != 0) {
+                    showNext(imageView);
+                } else
+                    onBackPressed();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Toast.makeText(context, "您点击了取消", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 }
