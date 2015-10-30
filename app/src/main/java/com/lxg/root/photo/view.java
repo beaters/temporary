@@ -83,34 +83,14 @@ public class view extends Activity{
         Bitmap bitmapNext=BitmapFactory.decodeFile(path);
         imageView.setImageBitmap(bitmapNext);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-    class MyClickListener implements View.OnClickListener
-    {
+    class MyClickListener implements View.OnClickListener{
         @Override
-        public void onClick(View V)
+        public void onClick(View v)
         {
             showDialog();
         }
     }
-
     public void showDialog()
     {
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
@@ -136,5 +116,32 @@ public class view extends Activity{
             }
         });
         builder.create().show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
