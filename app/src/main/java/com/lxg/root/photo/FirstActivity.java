@@ -275,8 +275,8 @@ public class FirstActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-
+        getMenuInflater().inflate(R.menu.menu_first,menu);
+        return true;
     }
 
     @Override
@@ -288,8 +288,9 @@ public class FirstActivity extends Activity
                 break;
             case R.id.about:
                 showAbout();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 
